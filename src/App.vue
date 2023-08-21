@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     getMsgTimer() {
-      this.getMsgList();
+      this.getMsgList(true);
       setInterval(()=> {
         this.getMsgList();
       }, 2000);
@@ -107,7 +107,7 @@ export default {
       });
     },
     /** 获取消息列表 */
-    getMsgList() {
+    getMsgList(isInit) {
       axios.get('/functions/getmsg').then((response)=> {
         const resData = response.data.data;
         resData.forEach(v=>{
@@ -121,7 +121,7 @@ export default {
           }
         }
         this.chatList = resData;
-        this.scrollToBottom();
+        isInit && this.scrollToBottom();
       }).catch(function (error) {
         console.log('请求失败', error);
       });
