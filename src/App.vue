@@ -28,13 +28,18 @@ export default {
       responseData: '',
       text: '',
       chatList: [
-        {
-          type: 'other',
-          msg: '您好，请问有什么能帮您的吗？',
-          time: new Date().getTime()
-        }
+        // {
+        //   type: 'other',
+        //   msg: '您好，请问有什么能帮您的吗？',
+        //   time: new Date().getTime()
+        // }
       ],
     }
+  },
+  mounted() {
+    setTimeout(()=> {
+      this.getMsgList();
+    }, 2000)
   },
   methods: {
     sendData() {
@@ -55,7 +60,17 @@ export default {
       this.text = '';
       this.scrollToBottom();
       axios.post('/functions/postmsg', queryArgs).then((response)=> {
-        // const resData = response.data.data;
+        console.log('请求成功', response);
+        this.scrollToBottom();
+      }).catch(function (error) {
+        console.log('请求失败', error);
+      });
+    },
+    /** 获取消息列表 */
+    getMsgList() {
+      axios.get('/functions/getmsg').then((response)=> {
+        const resData = response.data.data;
+        this.chatList = resData;
         // this.chatList.push({
         //   time: resData.time,
         //   msg: resData.chatMsg,
