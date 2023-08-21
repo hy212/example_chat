@@ -37,9 +37,9 @@ export default {
     }
   },
   mounted() {
-    setTimeout(()=> {
+    setInterval(()=> {
       this.getMsgList();
-    }, 2000)
+    }, 2000);
   },
   methods: {
     sendData() {
