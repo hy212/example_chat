@@ -31,8 +31,7 @@ async function handleRequest(req) {
             testStrInput: msgListStr,
             testStrOutput: list,
             output: msgList,
-            queryArgs: JSON.parse(queryArgs),
-            queryArgsStr: queryArgs
+            queryArgs,
         };
         return new Response(JSON.stringify(rspData), {
             headers,
