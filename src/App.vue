@@ -52,15 +52,15 @@ export default {
       });
       this.text = '';
       this.scrollToBottom();
-      axios.get('/functions/chat', {
+      axios.get('/functions/postmsg', {
         params: queryArgs
       }).then((response)=> {
-        const resData = response.data.data;
-        this.chatList.push({
-          time: resData.time,
-          msg: resData.chatMsg,
-          type: 'other',
-        });
+        // const resData = response.data.data;
+        // this.chatList.push({
+        //   time: resData.time,
+        //   msg: resData.chatMsg,
+        //   type: 'other',
+        // });
         console.log('请求成功', response);
         this.scrollToBottom();
       }).catch(function (error) {
