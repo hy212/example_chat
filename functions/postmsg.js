@@ -15,7 +15,7 @@ async function handleRequest(req) {
         const msgList = curMsgs || [];
         msgList.push(queryArgs);
         // 转成utf-8字节流存储
-        let encoder = new TextEncoder('utf8');
+        let encoder = new TextEncoder('UTF-8');
         const msgListStr = encoder.encode(JSON.stringify(msgList));
         await kv.put(kvName, msgListStr);
         const rspData = {
