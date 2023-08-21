@@ -100,8 +100,7 @@ export default {
       });
       this.text = '';
       this.scrollToBottom();
-      axios.post('/functions/postmsg', queryArgs).then((response)=> {
-        console.log('请求成功', response);
+      axios.post('/functions/postmsg', queryArgs).then(()=> {
         this.scrollToBottom();
       }).catch(function (error) {
         console.log('请求失败', error);
@@ -114,8 +113,14 @@ export default {
         resData.forEach(v=>{
           v.type = v.username === this.loginUser ? 'self' : 'other';
         })
+        if (this.chatList && this.chatList.length) {
+          const lastData = this.chatList[this.chatList.length - 1];
+          const index = resData.filter(v=> (v.username === lastData.username) && (v.time === lastData.time) && (v.msg === lastData.msg));
+          if (index === -1) { // 若不存在发送的最后一条消息时，添加信息到最后一条记录
+            resData.push(lastData);
+          }
+        }
         this.chatList = resData;
-        console.log('请求成功', response);
         this.scrollToBottom();
       }).catch(function (error) {
         console.log('请求失败', error);
@@ -179,7 +184,7 @@ export default {
   }
   .chatRoom .chartContent{
     padding: 10px;
-    background: #f8f8f8;
+    background: #fff;
     height: 60vh;
     overflow: auto;
   }
@@ -242,6 +247,8 @@ export default {
     display: flex;
     font-size: 0;
     align-items: center;
+    border-top: 1px solid #d7d7d7;
+    box-sizing: content-box;
   }
   .footer, .footer .input{
     height: 40px;
