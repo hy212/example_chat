@@ -94,6 +94,8 @@ export default {
       }
       this.chatList.push({
        ...queryArgs,
+        msg: this.text,
+        username: this.loginUser,
         type: 'self',
       });
       this.text = '';
