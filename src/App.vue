@@ -1,19 +1,35 @@
 <template>
-  <div class="chatRoom">
-    <div class="title">聊天室</div>
-    <div class="chartContent" ref="chartContent">
-      <div class="item"
-           :class="item.type"
-           v-for="(item, index) in chatList" :key="index">
-        <div class="avatar">{{ item.type === 'other' ? '客服' : '我'}}</div>
-        <div class="msg">{{ item.msg }}</div>
+  <div>
+    <div class="chatRoom" v-if="loginUser">
+      <div class="title">聊天室</div>
+      <div class="chartContent" ref="chartContent">
+        <div class="item"
+             :class="item.type"
+             v-for="(item, index) in chatList" :key="index">
+          <div class="avatar">{{ item.type === 'other' ? '其他' : '我'}}</div>
+          <div>
+            <div class="nickName" v-if="item.type === 'other'">{{ item.username }}</div>
+            <div class="msg">{{ item.msg }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <textarea v-model="text" class="input" @keydown="handleKeyCode($event)" ref="input" />
+        <button class="sendBtn" @click="sendData">发送</button>
       </div>
     </div>
-    <div class="footer">
-      <textarea v-model="text" class="input" @keydown="handleKeyCode($event)" ref="input" />
-      <button class="sendBtn" @click="sendData">发送</button>
+    <!--  填写用户名  -->
+    <div class="userLogin" v-else>
+      <div class="title">请设置群聊昵称</div>
+      <div class="userInputBox">
+        <img src="@/images/icon-user.png" />
+        <input v-model="nickName" placeholder="昵称" @keyup.enter="setLoginName"/>
+      </div>
+      <button class="enterBtn" @click="setLoginName" :class="{ disabled : !nickName || !nickName.trim() }">进入聊天室</button>
     </div>
+    <!--  /填写用户名  -->
   </div>
+
 </template>
 
 <script>
@@ -30,31 +46,53 @@ export default {
       chatList: [
         // {
         //   type: 'other',
+        //   username: `用户${parseInt(Math.random() * 1000)}`,
+        //   msg: '您好，请问有什么能帮您的吗？',
+        //   time: new Date().getTime()
+        // },
+        // {
+        //   type: 'self',
+        //   username: 'xyinghu',
         //   msg: '您好，请问有什么能帮您的吗？',
         //   time: new Date().getTime()
         // }
       ],
+      loginUser: '', // 登录用户
+      nickName: `用户${parseInt(Math.random() * 1000)}`
     }
   },
   created() {
-    setInterval(()=> {
-      this.getMsgList();
-    }, 2000);
+    const userName =  window.localStorage.getItem('nickName');
+    this.loginUser = userName || '';
+    if (this.loginUser) {
+      this.getMsgTimer();
+    }
   },
   methods: {
+    getMsgTimer() {
+      setInterval(()=> {
+        this.getMsgList();
+      }, 2000);
+    },
+    /** 设置登录用户名 */
+    setLoginName() {
+      if (this.nickName && this.nickName.trim()) {
+        this.loginUser = this.nickName.trim();
+        window.localStorage.setItem('nickName', this.loginUser);
+        this.getMsgTimer();
+      }
+    },
     sendData() {
       if (!this.text.trim()) {
         return;
       }
-      console.log(this.text);
       const queryArgs =  {
         msg: this.text,
-        username: 'xyinghu',
+        username: this.loginUser,
         time: new Date().getTime(),
       }
       this.chatList.push({
-        time: new Date().getTime(),
-        msg: this.text,
+       ...queryArgs,
         type: 'self',
       });
       this.text = '';
@@ -70,12 +108,10 @@ export default {
     getMsgList() {
       axios.get('/functions/getmsg').then((response)=> {
         const resData = response.data.data;
+        resData.forEach(v=>{
+          v.type = v.username === this.loginUser ? 'self' : 'other';
+        })
         this.chatList = resData;
-        // this.chatList.push({
-        //   time: resData.time,
-        //   msg: resData.chatMsg,
-        //   type: 'other',
-        // });
         console.log('请求成功', response);
         this.scrollToBottom();
       }).catch(function (error) {
@@ -231,5 +267,72 @@ export default {
   }
   .footer .input::-webkit-scrollbar {
     display: none;
+  }
+  /** 用户昵称 */
+  body{
+    background: #f8f8f8;
+  }
+  .userLogin{
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    margin: 10% auto 0;
+    width: 400px;
+    height: 200px;
+    /*border: 1px solid #d7d7d7;*/
+    background: #ffffff;
+    box-shadow: 0 0 4px rgba(0.5, 0.5, 0.5, 0.1);
+    text-align: center;
+    border-radius: 8px;
+  }
+  .userLogin .title{
+    font-size: 16px;
+    padding: 20px 0;
+    font-weight: bold;
+  }
+  .userLogin input{
+    font-size: 16px;
+    width: 80%;
+    height: 50px;
+    line-height: 24px;
+    padding: 10px 5px 10px 40px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid #d7d7d7;
+    outline: none;
+  }
+  .userInputBox{
+    position: relative;
+  }
+  .userInputBox img{
+    max-width: 24px;
+    position: absolute;
+    top: 10px;
+  }
+  .userLogin .enterBtn{
+    margin-top: 30px;
+    background: #5465cf;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 0 15px;
+    line-height: 30px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .userLogin .enterBtn:hover{
+    opacity: 0.8;
+  }
+  .userLogin .enterBtn.disabled{
+    cursor: not-allowed;
+    background: #ccc;
+  }
+  .nickName{
+    font-size: 12px;
+    color: #999;
+    padding-left: 15px;
+    margin-bottom: 2px;
   }
 </style>
