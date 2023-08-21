@@ -12,7 +12,7 @@ async function handleRequest(req) {
         const rspData = {
             code: 1,
             msg: '',
-            data: msgList
+            data: msgList || [],
         };
         return new Response(JSON.stringify(rspData), {
             headers,
