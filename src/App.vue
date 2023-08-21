@@ -44,6 +44,8 @@ export default {
       console.log(this.text);
       const queryArgs =  {
         msg: this.text,
+        username: 'xyinghu',
+        time: new Date().getTime(),
       }
       this.chatList.push({
         time: new Date().getTime(),

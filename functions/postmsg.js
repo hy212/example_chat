@@ -1,6 +1,19 @@
 addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })
+function getUrlParams(url) {
+    const urlStr = url.split('?')[1];
+    if (!urlStr) {
+        return {};
+    }
+    const obj = {};
+    const paramsArr = urlStr.split('&');
+    for (let i = 0, len = paramsArr.length; i < len; i++) {
+        const arr = paramsArr[i].split('=');
+        obj[arr[0]] = arr[1];
+    }
+    return obj;
+}
 // const responseMsgs = [
 //     '您好，客服正忙，请稍后联系。',
 //     '您好，正在处理您的消息，请稍等。',
@@ -21,7 +34,15 @@ async function handleRequest(req) {
         // };
         // let randomIndex = Math.floor(Math.random() * responseMsgs.length);
         // rspData.data.chatMsg = `[自动回复] ${responseMsgs[randomIndex]}`;
-        return new Response(JSON.stringify(req), {
+        // const msg = getUrlParams(req.url).msg;
+        const queryArgs = req.json();
+        // await kv.put('mgsList',value);
+        const rspData = {
+            code: 1,
+            msg: '',
+            data: { ...queryArgs }
+        };
+        return new Response(JSON.stringify(rspData), {
             headers: {
                 "content-type": "application/json",
             },
