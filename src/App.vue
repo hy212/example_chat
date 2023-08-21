@@ -345,4 +345,20 @@ export default {
     padding-left: 15px;
     margin-bottom: 2px;
   }
+  @media(max-width: 500px) {
+    .userLogin{
+      width: 90%;
+    }
+  }
+  @media(max-width: 900px) {
+    .chatRoom{
+      width: 90%;
+    }
+    .footer .input{
+      width: 75%;
+    }
+    .sendBtn{
+      width: 24%;
+    }
+  }
 </style>
