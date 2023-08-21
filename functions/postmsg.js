@@ -11,13 +11,14 @@ async function handleRequest(req) {
         const queryArgs = await req.json();
         //
         const curMsgs = await kv.get('msgList', "json");
-        // curMsgs.push(queryArgs);
-        // await kv.put('mgsList', curMsgs);
+        const msgList = curMsgs || [];
+        msgList.push(queryArgs);
+        await kv.put('mgsList', msgList);
         const rspData = {
             code: 1,
             msg: '',
             data: queryArgs,
-            curMsgs
+            msgList
         };
         return new Response(JSON.stringify(rspData), {
             headers,

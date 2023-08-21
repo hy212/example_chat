@@ -36,7 +36,7 @@ export default {
       ],
     }
   },
-  mounted() {
+  created() {
     setInterval(()=> {
       this.getMsgList();
     }, 2000);
