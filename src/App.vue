@@ -74,11 +74,6 @@ export default {
       setInterval(()=> {
         this.getMsgList();
       }, 2000);
-      axios.post('/functions/testkv', { code: encodeURIComponent('测试')}).then((response)=> {
-        console.log('请求成功', response);
-      }).catch(function (error) {
-        console.log('请求失败', error);
-      });
     },
     /** 设置登录用户名 */
     setLoginName() {
@@ -93,8 +88,8 @@ export default {
         return;
       }
       const queryArgs =  {
-        msg: this.text,
-        username: this.loginUser,
+        msg: encodeURIComponent(this.text),
+        username: encodeURIComponent(this.loginUser),
         time: new Date().getTime(),
       }
       this.chatList.push({

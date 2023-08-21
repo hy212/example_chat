@@ -10,14 +10,14 @@ async function handleRequest(req) {
     console.log("req.method:", method, req);
     try {
         const queryArgs = await req.json();
-        //
+        // 乱码问题处理
+        queryArgs.msg = decodeURIComponent(queryArgs.msg);
+        queryArgs.username = decodeURIComponent(queryArgs.username);
+        //获取kv数据
         const curMsgs = await kv.get(kvName, "json");
         const msgList = curMsgs || [];
         msgList.push(queryArgs);
-        // 转成utf-8字节流存储
-        let encoder = new TextEncoder('UTF-8');
-        const msgListStr = encoder.encode(JSON.stringify(msgList));
-        await kv.put(kvName, msgListStr);
+        await kv.put(kvName, JSON.stringify(msgList));
         const rspData = {
             code: 1,
             msg: '',

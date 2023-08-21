@@ -9,14 +9,11 @@ async function handleRequest(req) {
     console.log("req.method:", method, req);
     try {
         // 解码utf-8数据
-        // const msgList = await kv.get('msgList', "json");
-        const msgList = await kv.get('msgList', 'arrayBuffer');
-        let decoder = new TextDecoder('UTF-8');
-        const list = msgList ? JSON.parse(decoder.decode(msgList)) : [];
+        const msgList = await kv.get('msgList', "json");
         const rspData = {
             code: 1,
             msg: '',
-            data: list || [],
+            data: msgList || [],
         };
         return new Response(JSON.stringify(rspData), {
             headers,
