@@ -74,6 +74,11 @@ export default {
       setInterval(()=> {
         this.getMsgList();
       }, 2000);
+      axios.post('/functions/testkv').then((response)=> {
+        console.log('请求成功', response);
+      }).catch(function (error) {
+        console.log('请求失败', error);
+      });
     },
     /** 设置登录用户名 */
     setLoginName() {
