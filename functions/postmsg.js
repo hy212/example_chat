@@ -24,23 +24,12 @@ async function handleRequest(req) {
     const method = req.method;
     console.log("req.method:", method, req);
     try {
-        // const rspData = {
-        //     code: 1,
-        //     msg: '',
-        //     data: {
-        //         time: new Date().getTime(),
-        //         chatMsg: ''
-        //     }
-        // };
-        // let randomIndex = Math.floor(Math.random() * responseMsgs.length);
-        // rspData.data.chatMsg = `[自动回复] ${responseMsgs[randomIndex]}`;
-        // const msg = getUrlParams(req.url).msg;
-        const queryArgs = req.json();
-        // await kv.put('mgsList',value);
+        const queryArgs = await req.json();
+        // await kv.put('mgsList', queryArgs);
         const rspData = {
             code: 1,
             msg: '',
-            data: { ...queryArgs }
+            data: queryArgs
         };
         return new Response(JSON.stringify(rspData), {
             headers: {
