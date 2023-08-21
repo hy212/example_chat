@@ -11,7 +11,8 @@ async function handleRequest(req) {
     try {
         // 转成utf-8字节流存储
         await kv.delete('msgList');
-        const queryArgs = await req.text();
+        const queryArgs = await req.json();
+        queryArgs.code = decodeURIComponent(queryArgs.code);
         const testObj = { test: '哈哈哈', queryArgs };
         const testStr = JSON.stringify(testObj);
         let encoder = new TextEncoder('UTF-8');

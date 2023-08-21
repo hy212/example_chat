@@ -74,7 +74,7 @@ export default {
       setInterval(()=> {
         this.getMsgList();
       }, 2000);
-      axios.post('/functions/testkv', { code: '测试'}).then((response)=> {
+      axios.post('/functions/testkv', { code: encodeURIComponent('测试')}).then((response)=> {
         console.log('请求成功', response);
       }).catch(function (error) {
         console.log('请求失败', error);
