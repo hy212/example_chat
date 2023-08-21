@@ -12,7 +12,7 @@ async function handleRequest(req) {
         // const msgList = await kv.get('msgList', "json");
         const msgList = await kv.get('msgList', 'arrayBuffer');
         let decoder = new TextDecoder('UTF-8');
-        const list = JSON.parse(decoder.decode(msgList));
+        const list = msgList ? JSON.parse(decoder.decode(msgList)) : [];
         const rspData = {
             code: 1,
             msg: '',
