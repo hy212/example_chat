@@ -2,7 +2,7 @@ addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })
 const headers = {
-    "content-type": "application/json",
+    "content-type":  "application/json; charset=utf-8",
 };
 async function handleRequest(req) {
     const method = req.method;

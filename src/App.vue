@@ -70,6 +70,7 @@ export default {
   },
   methods: {
     getMsgTimer() {
+      this.getMsgList();
       setInterval(()=> {
         this.getMsgList();
       }, 2000);
