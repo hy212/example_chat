@@ -10,7 +10,9 @@ async function handleRequest(req) {
     console.log("req.method:", method, req);
     try {
         // 转成utf-8字节流存储
-        const testStr = '哈哈哈';
+        await kv.delete('msgList');
+        const testObj = { test: '哈哈哈' };
+        const testStr = JSON.stringify(testObj);
         let encoder = new TextEncoder('UTF-8');
         const msgListStr = encoder.encode(testStr);
         await kv.put(kvName, msgListStr);
@@ -25,7 +27,8 @@ async function handleRequest(req) {
             data: list || [],
             testStr,
             testStrInput: msgListStr,
-            testStrOutput: list
+            testStrOutput: list,
+            output: msgList,
         };
         return new Response(JSON.stringify(rspData), {
             headers,
