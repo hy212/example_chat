@@ -10,7 +10,7 @@ async function handleRequest(req) {
     try {
         // 解码utf-8数据
         // const msgList = await kv.get('msgList', "json");
-        const msgList = await kv.get('msgList');
+        const msgList = await kv.get('msgList', 'arrayBuffer');
         let decoder = new TextDecoder('utf8');
         const list = JSON.parse(decoder.decode(msgList));
         const rspData = {
