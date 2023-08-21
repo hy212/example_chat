@@ -52,9 +52,7 @@ export default {
       });
       this.text = '';
       this.scrollToBottom();
-      axios.get('/functions/postmsg', {
-        params: queryArgs
-      }).then((response)=> {
+      axios.post('/functions/postmsg', queryArgs).then((response)=> {
         // const resData = response.data.data;
         // this.chatList.push({
         //   time: resData.time,
